@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objektum</title>
+</head>
+<body>
+    <h1>Tanulók adatai</h1> 
+    <label for="numStudents">Hány adatot szeretnél megadni?</label> 
+    <input type="number" id="numStudents" min="1"> 
+    <button onclick="collectData()">Adatok beküldése</button> 
+    <div id="studentForm"></div> 
+    <h2>A tanulók adatai:</h2> 
+    <div id="studentData"></div> 
+    <h3>Heti Órarend</h3> 
+    <div id="schedule"></div>
+    <script>
+        const students = [];
+
+        function collectData() {
+            const numStudents = document.getElementById('numStudents').value;
+            const studentForm = document.getElementById('studentForm');
+            studentForm.innerHTML = ''; 
+
+            for (let i = 0; i < numStudents; i++) {
+                studentForm.innerHTML += `
+                <div>
+                    <label for="name${i}">Név:</label>
+                    <input type="text" id="name${i}" required>
+                    <label for="email${i}">E-mail:</label>
+                    <input type="email" id="email${i}" required>
+                </div>
+            `;
+        }
+        studentForm.innerHTML += `<button onclick="storeData(${numStudents})">Mentés</button>`;
+    }
+
+        function storeData(numStudents) {
+            for (let i = 0; i < numStudents; i++) {
+                const name = document.getElementById(`name${i}`).value;
+                const email = document.getElementById(`email${i}`).value;
+                students.push({ name, email });
+            }
+            displayData();
+    }
+
+        function displayData() {
+            const studentData = document.getElementById('studentData');
+            studentData.innerHTML = '';
+
+            students.forEach(student => {
+                studentData.innerHTML += `<p>Név: ${student.name} E-mail: ${student.email}</p>`;
+            });
+    }
+
+    const schedule = [
+    { day: 'Hétfő', classes: ['Matematika', 'Fizika', 'Kémia'] },
+    { day: 'Kedd', classes: ['Biológia', 'Történelem', 'Irodalom'] },
+    { day: 'Szerda', classes: ['Földrajz', 'Testnevelés', 'Zene'] },
+    { day: 'Csütörtök', classes: ['Angol', 'Informatika', 'Rajz'] },
+    { day: 'Péntek', classes: ['Német', 'Technika', 'Etika'] }
+];
+
+    function displaySchedule() {
+        const scheduleDiv = document.getElementById('schedule');
+        schedule.forEach(daySchedule => {
+            const dayDiv = document.createElement('div');
+            dayDiv.innerHTML = `<h2>${daySchedule.day}</h2>`;
+            daySchedule.classes.forEach(classItem => {
+                const classDiv = document.createElement('p');
+                classDiv.innerText = classItem;
+                dayDiv.appendChild(classDiv);
+            });
+            scheduleDiv.appendChild(dayDiv);
+        });
+    }
+
+    displaySchedule();
+
+    </script>
+</body>
+</html>
